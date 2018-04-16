@@ -1,10 +1,13 @@
+import sys
 from Bio import AlignIO
 
-def convert(fasta, phylip):
+def convert(sys.argv[1], sys.argv[2]):
 	""" converts a FASTA file into a PHYLIP file
-	input fasta: input fasta file containing sequences of equal length
-	input phylip: output phylip file
+	input sys.argv[1]: input fasta file containing sequences of equal length
+	input sys.argv[2]: output phylip file
 	"""
+	fasta = sys.argv[1]
+	phylip = sys.argv[2]
 	input_handle = open(fasta, "rU")
 	output_handle = open(phylip, "w")
 
