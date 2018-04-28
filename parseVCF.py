@@ -48,27 +48,37 @@ def haplotype(L, subDict):
 	for position, d in subDict.items():
 		for key in d:
 			tListA.append((key+'A', d.get(key)[0]))
-			tListB.append((key+'B', d.get(key)[2]))
+			tListB.append((key+'B', d.get(key)[2])) #doesn't work for ones with multiple snp variations
 	n = len(L) #150
 	LLA = [tListA[i:i + n] for i in range(0, len(tListA), n)]
-	LLB = [tListB[i:i + n] for i in range(0, len(tListB), n)]
+	LLB = [tListB[i:i + n] for i in range(0, len(tListB), n)] 
 	haploDictA = dict(zip(positions, LLA))
 	haploDictB = dict(zip(positions, LLB))
 	for key, value in haploDictA.items():
 		haploDictA[key] = dict(value)
 	for key, value in haploDictB.items():
 		haploDictB[key] = dict(value)
-	for key in haploDictA.keys():
-		for key in haploDictB.keys():
-			finalDict[key] = []
-			finalDict[key].append(haploDictA[key])
-			finalDict[key].append(haploDictB[key])
-	return finalDict
-
+	return (haploDictA, haploDictB)
+	
+def fasta(L, haploTuple):
+	headerList = []
+	haploDictA = haploTuple[0]
+	positionsA = list(haploDictA.keys())
+# make fasta windows
 
 def main():
 	L = idList()
 	subDict = genotype(L)
-	haplotype(L, subDict)
+	haploTuple = haplotype(L, subDict)
+	fasta(L, haploTuple)
+	
 
 main()
+
+
+"""
+Yes, based on the positions - like that screenshot says it's 
+chromosome 12, position 60219. So if you're overlapping the windows, 
+that snp would be in position 719 for the window from 59500-60500, and 
+in position 219 for the window from 60000-61000.
+"""
