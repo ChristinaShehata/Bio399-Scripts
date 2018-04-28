@@ -1,7 +1,7 @@
 import vcf
 mypath = "/Users/ChristinaShehata/Desktop/Wickett-Lab/Bio399-pyScripts/"
 
-def idList(): #not necessary if you use vcf tools to only have vcf info from individuals of interest
+def idList():
 	"""
 	idList creates a list out of a text file containing individuals of interest
 	"""
@@ -58,27 +58,21 @@ def haplotype(L, subDict):
 		haploDictA[key] = dict(value)
 	for key, value in haploDictB.items():
 		haploDictB[key] = dict(value)
-	return (haploDictA, haploDictB)
+	for valueA in haploDictA.values():
+		for valueB in haploDictB.values():
+			valueA.update(valueB)
+	finalDict = haploDictA.copy()
+	return finalDict
 	
-def fasta(L, haploTuple):
+def fasta(L, finalDict):
 	headerList = []
-	haploDictA = haploTuple[0]
-	positionsA = list(haploDictA.keys())
 # make fasta windows
 
 def main():
 	L = idList()
 	subDict = genotype(L)
-	haploTuple = haplotype(L, subDict)
-	fasta(L, haploTuple)
+	finalDict = haplotype(L, subDict)
+	#fasta(L, haploTuple)
 	
-
 main()
 
-
-"""
-Yes, based on the positions - like that screenshot says it's 
-chromosome 12, position 60219. So if you're overlapping the windows, 
-that snp would be in position 719 for the window from 59500-60500, and 
-in position 219 for the window from 60000-61000.
-"""
