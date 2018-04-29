@@ -44,35 +44,31 @@ def haplotype(L, subDict):
 	positions = subDict.keys()
 	tListA = []
 	tListB = []
-	finalDict = {}
 	for position, d in subDict.items():
 		for key in d:
 			tListA.append((key+'A', d.get(key)[0]))
 			tListB.append((key+'B', d.get(key)[2])) #doesn't work for ones with multiple snp variations
 	n = len(L) #150
-	LLA = [tListA[i:i + n] for i in range(0, len(tListA), n)]
-	LLB = [tListB[i:i + n] for i in range(0, len(tListB), n)] 
-	haploDictA = dict(zip(positions, LLA))
-	haploDictB = dict(zip(positions, LLB))
+	A = [tListA[i:i + n] for i in range(0, len(tListA), n)]
+	B = [tListB[i:i + n] for i in range(0, len(tListB), n)] 
+	haploDictA = dict(zip(positions, A))
+	haploDictB = dict(zip(positions, B))
 	for key, value in haploDictA.items():
 		haploDictA[key] = dict(value)
 	for key, value in haploDictB.items():
 		haploDictB[key] = dict(value)
-	for valueA in haploDictA.values():
-		for valueB in haploDictB.values():
-			valueA.update(valueB)
-	finalDict = haploDictA.copy()
-	return finalDict
+	return (haploDictA, haploDictB)
 	
-def fasta(L, finalDict):
-	headerList = []
+def fasta(L, haploTuple):
+	haploDictA = haploTuple[0]
 # make fasta windows
 
 def main():
 	L = idList()
 	subDict = genotype(L)
-	finalDict = haplotype(L, subDict)
-	#fasta(L, haploTuple)
+	haploTuple = haplotype(L, subDict)
+	fasta(L, haploTuple)
 	
 main()
+
 
