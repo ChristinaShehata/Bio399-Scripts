@@ -18,12 +18,12 @@ def idList(indList):
 		L = [line.strip() for line in f.readlines()]
 	return L
 	
-def genotype(L, vcf):
+def genotype(L, variants):
 	"""
 	genotype creates a dictionary with all SNP positions as the keys and dictionaries 
 	of individual IDs and genotype information as the values
 	input L: list of individuals (samples) of interest
-	input vcf: vcf file containing variant information
+	input variants: vcf file containing variant information
 	"""
 	posList = []
 	sampleList = []
@@ -31,7 +31,7 @@ def genotype(L, vcf):
 	genoDict = {}
 	tupList = []
 	subDict = {}
-	vcf_reader = vcf.Reader(open(vcf, 'r'))
+	vcf_reader = vcf.Reader(open(variants, 'r'))
 	for record in vcf_reader:
 		posList.append(record.POS)
 		for id in L: # filter step
