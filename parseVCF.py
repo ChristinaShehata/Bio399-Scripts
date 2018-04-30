@@ -39,7 +39,7 @@ def genotype(L, variants):
 			sampleList.append(call.sample)
 			gtList.append(call.gt_bases)
 	for sample, gt in zip(sampleList, gtList):
-		genoDict.setdefault(sample, []).append(gt.replace('|', '')) #id: [list of all snps for that individual]
+		genoDict.setdefault(sample, []).append(gt) #id: [list of all snps for that individual]
 	for x in range(len(posList)):
 		for samp, geno in genoDict.items():
 			tupList.append((samp,geno[x])) # 612 tuples for each id
@@ -56,8 +56,8 @@ def haplotype(L, subDict):
 	tListB = []
 	for position, d in subDict.items():
 		for key in d:
-			tListA.append((key+'A', d.get(key)[0]))
-			tListB.append((key+'B', d.get(key)[1])) #does this work for ones with multiple snp variations?
+			tListA.append((key+'A', d.get(key).split('|')[0])) # works for indels, but multiple alleles?
+			tListB.append((key+'B', d.get(key).split('|')[1])) 
 	n = len(L) #150
 	A = [tListA[i:i + n] for i in range(0, len(tListA), n)]
 	B = [tListB[i:i + n] for i in range(0, len(tListB), n)] 
