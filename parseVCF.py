@@ -1,19 +1,29 @@
+import sys
 import vcf
-mypath = "/Users/ChristinaShehata/Desktop/Wickett-Lab/Bio399-pyScripts/"
 
-def idList():
+####################################################################################
+##
+## Files Needed:
+## sys.argv[1] = a list containing the individuals of interest separated by '\n'
+## sys.argv[2] = vcf file containing variant information
+##
+####################################################################################
+
+def idList(indList):
 	"""
 	idList creates a list out of a text file containing individuals of interest
+	input indList: a list containing the individuals of interest separated by '\n'
 	"""
-	with open("/Users/ChristinaShehata/Desktop/150ind.txt", "r") as f: 
+	with open(indList, "r") as f: 
 		L = [line.strip() for line in f.readlines()]
 	return L
 	
-def genotype(L):
+def genotype(L, vcf):
 	"""
 	genotype creates a dictionary with all SNP positions as the keys and dictionaries 
 	of individual IDs and genotype information as the values
 	input L: list of individuals (samples) of interest
+	input vcf: vcf file containing variant information
 	"""
 	posList = []
 	sampleList = []
@@ -21,7 +31,7 @@ def genotype(L):
 	genoDict = {}
 	tupList = []
 	subDict = {}
-	vcf_reader = vcf.Reader(open('/Users/ChristinaShehata/Desktop/SMALLchr12Variants.vcf', 'r'))
+	vcf_reader = vcf.Reader(open(vcf, 'r'))
 	for record in vcf_reader:
 		posList.append(record.POS)
 		for id in L: # filter step
@@ -47,7 +57,7 @@ def haplotype(L, subDict):
 	for position, d in subDict.items():
 		for key in d:
 			tListA.append((key+'A', d.get(key)[0]))
-			tListB.append((key+'B', d.get(key)[1])) #doesn't work for ones with multiple snp variations
+			tListB.append((key+'B', d.get(key)[1])) #does this work for ones with multiple snp variations?
 	n = len(L) #150
 	A = [tListA[i:i + n] for i in range(0, len(tListA), n)]
 	B = [tListB[i:i + n] for i in range(0, len(tListB), n)] 
@@ -64,8 +74,8 @@ def fasta(L, haploTuple):
 # make fasta windows
 
 def main():
-	L = idList()
-	subDict = genotype(L)
+	L = idList(sys.argv[1])
+	subDict = genotype(L, sys.argv[2])
 	haploTuple = haplotype(L, subDict)
 	fasta(L, haploTuple)
 	
