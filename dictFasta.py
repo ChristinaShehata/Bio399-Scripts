@@ -48,7 +48,7 @@ def prep():
 
 def write(new_dict, output):
 	""" write puts sequences into fasta format
-	sys.argv[1] = path to directory for output fasta files
+	output = path to directory for output fasta files
 	"""
 	for record, seqList in new_dict.items():
 		with open(output + "ouput{}.fa".format(record + '-' + str(int(record)+windowLength)), "w") as f:
