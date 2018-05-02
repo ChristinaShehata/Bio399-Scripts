@@ -1,3 +1,4 @@
+import sys
 from Bio import SeqIO
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
@@ -28,8 +29,8 @@ def parseDict(n):
 
 def chunks(l, n):
 	""" chunks separates a list into even-sized parts """
-    for i in range(0, len(l), n):
-        yield l[i:i+n]
+	for i in range(0, len(l), n):
+		yield l[i:i+n]
         
 def prep():
 	""" prep makes a dictionary with fasta file information """
@@ -46,9 +47,11 @@ def prep():
 	return new_dict
 
 def write(new_dict):
-	""" write puts sequences into fasta format """
+	""" write puts sequences into fasta format
+	sys.argv[1] = path to directory for output fasta files
+	"""
 	for record, seqList in new_dict.items():
-		with open("/Users/ChristinaShehata/Desktop/ouput{}.fa".format(record + '-' + str(int(record)+windowLength)), "w") as f:
+		with open("sys.argv[1]/ouput{}.fa".format(record + '-' + str(int(record)+windowLength)), "w") as f:
 			for ind_seq in seqList:
 				f.write("{}	{}\n".format(("> " + ind_seq.id), ind_seq.seq))
 
