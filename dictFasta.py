@@ -3,15 +3,18 @@
 def fasta(n):
 	refList = ['-']*10000
 	newSeq = ''
-	tup = ()
+	tupList = []
 	for position, id_snp in haploDictA.items():
 		for i in range(len(refList)):
-			if position - n == i: #for first 10kb
-				for id in id_snp.keys():	
-					refList[i] = id_snp[id]
-					newSeq = "".join(list(refList))
-					tup = (id, newSeq)
-	return tup
+			if position - n == i:
+				for id in id_snp.keys():
+					newList = [refList]
+					for rList in newList:
+						rList[i] = id_snp[id]
+						newSeq = "".join(list(rList))
+						tup = (id, newSeq)
+						tupList.append(tup)
+	return tupList
 
 def prep():
 	windowList = list(range(55000, 105000, 5000))
