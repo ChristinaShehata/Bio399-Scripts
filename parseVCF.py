@@ -1,5 +1,6 @@
 import sys
 import vcf
+from Bio import SeqIO
 
 ####################################################################################
 ##
@@ -51,6 +52,10 @@ def genotype(L, variants):
 	return subDict
 
 def haplotype(L, subDict):
+	""" haplotype turns a genotype dictionary into a haplotype dictionary
+	input L: list of samples
+	input subDict: genotype dictionary
+	"""
 	positions = subDict.keys()
 	tListA = []
 	tListB = []
@@ -68,16 +73,12 @@ def haplotype(L, subDict):
 	for key, value in haploDictB.items():
 		haploDictB[key] = dict(value)
 	return (haploDictA, haploDictB)
-	
-def fasta(L, haploTuple):
-	haploDictA = haploTuple[0]
-# make fasta windows
 
 def main():
 	L = idList(sys.argv[1])
 	subDict = genotype(L, sys.argv[2])
 	haploTuple = haplotype(L, subDict)
-	fasta(L, haploTuple)
+	return haploTuple
 	
 main()
 
