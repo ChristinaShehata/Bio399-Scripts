@@ -8,6 +8,7 @@ from Bio import SeqIO
 ## Files Needed:
 ## sys.argv[1] = a list containing the individuals of interest separated by '\n'
 ## sys.argv[2] = vcf file containing variant information
+## sys.argv[3] = path to jsonDictA
 ##
 ####################################################################################
 
@@ -41,10 +42,10 @@ def genotype(L, variants):
 			sampleList.append(call.sample)
 			gtList.append(call.gt_bases)
 	for sample, gt in zip(sampleList, gtList):
-		genoDict.setdefault(sample, []).append(gt) #id: [list of all snps for that individual]
+		genoDict.setdefault(sample, []).append(gt) 
 	for x in range(len(posList)):
 		for samp, geno in genoDict.items():
-			tupList.append((samp,geno[x])) # 612 tuples for each id
+			tupList.append((samp,geno[x]))
 	n = len(L) #150
 	LL = [tupList[i:i + n] for i in range(0, len(tupList), n)]
 	subDict = dict(zip(posList, LL))
@@ -62,7 +63,7 @@ def haplotype(L, subDict):
 	tListB = []
 	for position, d in subDict.items():
 		for key in d:
-			tListA.append((key+'A', d.get(key).split('|')[0])) # works for indels, but multiple alleles?
+			tListA.append((key+'A', d.get(key).split('|')[0]))
 			tListB.append((key+'B', d.get(key).split('|')[1])) 
 	n = len(L) #150
 	A = [tListA[i:i + n] for i in range(0, len(tListA), n)]
@@ -76,6 +77,7 @@ def haplotype(L, subDict):
 	return (haploDictA, haploDictB)
 
 def main():
+	""" writes haploDicts to json files """
 	L = idList(sys.argv[1])
 	subDict = genotype(L, sys.argv[2])
 	haploTuple = haplotype(L, subDict)
@@ -83,7 +85,7 @@ def main():
 	jsonB = json.dumps(haploTuple[1])
 	with open(sys.argv[3] + 'jsonA.json', 'w') as a:
 		json.dump(jsonA, a)
-	with open(sys.argv[4] + 'jsonB.json', 'w') as b:
+	with open(sys.argv[3] + 'jsonB.json', 'w') as b:
 		json.dump(jsonB, b)
 	
 main()
