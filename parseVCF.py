@@ -1,5 +1,6 @@
 import sys
 import vcf
+import json
 from Bio import SeqIO
 
 ####################################################################################
@@ -78,7 +79,12 @@ def main():
 	L = idList(sys.argv[1])
 	subDict = genotype(L, sys.argv[2])
 	haploTuple = haplotype(L, subDict)
-	return haploTuple
+	jsonA = json.dumps(haploTuple[0])
+	jsonB = json.dumps(haploTuple[1])
+	with open(sys.argv[3] + 'jsonA.json', 'w') as a:
+		json.dump(jsonA, a)
+	with open(sys.argv[4] + 'jsonB.json', 'w') as b:
+		json.dump(jsonB, b)
 	
 main()
 
