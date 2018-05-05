@@ -4,11 +4,6 @@ from Bio import SeqIO
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
-# check if this works
-# transfer loci fastas to treubia --> /data/cshehata/LSD
-# next, make BIG dict
-# Then, run each dictionary through this script, **edit windows first
-
 ####################################################################################
 ##
 ## Files Needed:
@@ -20,7 +15,8 @@ from Bio.SeqRecord import SeqRecord
 
 windowLength = 10000
 overlapLength = 5000
-windowList = list(range(55000, 105000, overlapLength)) # change for more windows
+#windowList = list(range(55000,110000, overlapLength))
+windowList = list(range(110905000, 112104000, overlapLength)) # change for more windows
 newL = []
 
 def open_json(j):
@@ -29,8 +25,9 @@ def open_json(j):
 	input j = path to json file
 	"""
 	with open(j, "r") as f:
-		json_data = json.loads(j)[0]
-	return json_data
+		data = json.loads(f.read())
+	haploDictA = json.loads(data)
+	return haploDictA
 
 def idLst(indList):
 	"""
@@ -41,7 +38,7 @@ def idLst(indList):
 		L = [line.strip() + 'A' for line in f.readlines()] #for haploDictA
 	return L
 
-def parseDict(n, id):
+def parseDict(n, id, haploDictA):
 	""" parseDict parses through haploDictsA and B
 	input n: start position of window
 	"""
@@ -50,7 +47,7 @@ def parseDict(n, id):
 	tupList = []
 	for position, id_snp in haploDictA.items():
 		for i in range(len(refList)):
-			if position - n == i:
+			if int(position) - n == i:
 				refList[i] = id_snp[id]
 				newSeq = "".join(refList)
 	tupList.append((id, newSeq, n))
@@ -82,7 +79,7 @@ def write(new_dict, output):
 	input output: path to directory to hold fasta files
 	"""
 	for record, seqList in new_dict.items():
-		with open(output + "ouput{}.fa".format(record + '-' + str(int(record)+windowLength)), "w") as f:
+		with open(output + "output{}.fa".format(record + '-' + str(int(record)+windowLength)), "w") as f:
 			for ind_seq in seqList:
 				f.write("{}	{}\n".format(("> " + ind_seq.id), ind_seq.seq))
 
@@ -91,7 +88,7 @@ def main():
 	idList = idLst(sys.argv[2])
 	for n in windowList:
 		for id in idList:
-			newL.append(parseDict(n,id)) 
+			newL.append(parseDict(n,id, haploDictA)) 
 	new_dict = prep(idList)
 	write(new_dict, sys.argv[3])
 
