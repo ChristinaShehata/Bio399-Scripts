@@ -1,10 +1,10 @@
+# coding: utf-8
 import sys
 from Bio import SeqIO
-from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
-mypath = '/artocarpus/lauren/Hybpiper/assemblies/'
+mypath = '/Users/ChristinaShehata/Desktop/assemblies/' #path to assemblies
+#mypath = '/artocarpus/lauren/Hybpiper/assemblies/'
 
-def sampleList(indList): #sys.argv[2]
+def sampleList(indList):
 	"""
 	sampleList creates a list out of a text file containing individuals of interest
 	input indList: a list containing the individuals of interest separated by '\n'
@@ -16,13 +16,20 @@ def sampleList(indList): #sys.argv[2]
 def get_genes(sampList, gene):
 	geneDict = {}
 	for ind in sampList:
-		with open(mypath + "{}/{}/{}.contigs.fasta".format(ind,gene,gene)) as f:
-			for record in SeqIO.parse(f, "fasta"):
-				geneDict[ind] = (record.id, record.seq)
-	print(geneDict)
+		with open(mypath + "{}/{}/{}_contigs.fasta".format(ind,gene,gene), 'r') as f:
+			records = list(SeqIO.parse(f, "fasta"))
+			geneDict[ind] = ('> ' + ind, records[0].seq) #assuming 1st node?
+	return geneDict
+
+def write(geneDict, outFile):
+	with open(outFile, 'w') as f:
+		for id, seq in geneDict.items():
+			f.write(seq[0] +'\n')
+			f.write(str(seq[1]) + '\n')
 
 def main():
-	sampList = sampleList('/Users/ChristinaShehata/Desktop/artocarpus_samples.txt')
-	get_genes(sampList, sys.argv[1])
+	sampList = sampleList(sys.argv[2])
+	geneDict = get_genes(sampList, sys.argv[1])
+	write(geneDict, sys.argv[3])
 	
 main()
