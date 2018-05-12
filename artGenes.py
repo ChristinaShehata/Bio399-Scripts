@@ -14,6 +14,11 @@ def sampleList(indList):
 	return L
 
 def get_genes(sampList, gene):
+	""" get_genes opens up folders for individuals of interest and parses for
+	a particular gene of interest
+	input sampList: list of individuals of interest
+	input gene: gene of interest
+	"""
 	geneDict = {}
 	for ind in sampList:
 		with open(mypath + "{}/{}/{}_contigs.fasta".format(ind,gene,gene), 'r') as f:
@@ -22,6 +27,10 @@ def get_genes(sampList, gene):
 	return geneDict
 
 def write(geneDict, outFile):
+	""" writes gene sequences for each individual into one fasta file
+	input geneDict: dictionary of each individual's sequence for a particular gene
+	input outFile: output fasta file
+	"""
 	with open(outFile, 'w') as f:
 		for id, seq in geneDict.items():
 			f.write(seq[0] +'\n')
