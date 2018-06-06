@@ -1,5 +1,5 @@
 import plotly
-#plotly.tools.set_credentials_file(username=' ', api_key='')
+plotly.tools.set_credentials_file(username=' ', api_key='')
 import plotly.plotly as py
 import plotly.graph_objs as go
 import csv
