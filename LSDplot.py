@@ -104,16 +104,5 @@ layout = {"title": "LSD for Artocarpus Phylogenetic Markers",
           "xaxis": {"title": "Gene", },
           "yaxis": {"title": "LSDnorm"}}
 
-
-fig = go.Figure(data=data, layout=layout)
-py.iplot(fig, filename='LSD_artocarpus')
-
-
-
-
-
-
-
-
 fig = go.Figure(data=data, layout=layout)
 py.iplot(fig, filename='LSD_artocarpus')
