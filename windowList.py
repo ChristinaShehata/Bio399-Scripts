@@ -1,5 +1,12 @@
 import sys
 
+######################################################################
+## 
+## Files needed:
+## sys.argv[1] is output windowList text file
+##
+######################################################################
+
 start = 111350000
 end = 111460000
 overlapLength = 5000
@@ -15,5 +22,5 @@ def windowList(outFile):
 			f.write(str(n) + '\n')
 	
 def main():
-	windowList('/Users/ChristinaShehata/Desktop/windowList.txt')
+	windowList(sys.argv[1])
 
