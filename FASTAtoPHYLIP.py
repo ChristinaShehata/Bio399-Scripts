@@ -16,5 +16,9 @@ def convert(fasta, phylip):
 	input_handle.close()
 
 convert(sys.argv[1], sys.argv[2])
+
+
+
+
 		
 		

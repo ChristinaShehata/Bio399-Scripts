@@ -1,6 +1,6 @@
 #!/usr/bin/env Rscript
 
-files <- list.files(path="/Users/ChristinaShehata/Desktop/tree_blanks/", pattern="*.tre", full.names=T, recursive=FALSE)
+files <- list.files(path="/Users/ChristinaShehata/Downloads/Kristens_Trees/raxml_trees/", pattern="*.tree", full.names=T, recursive=FALSE)
 lst <- vector("list", length(files))
 names(lst) <- files
 

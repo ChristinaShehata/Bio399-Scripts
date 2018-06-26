@@ -15,5 +15,5 @@ def windowList(outFile):
 			f.write(str(n) + '\n')
 	
 def main():
-	windowList(sys.argv[1])
+	windowList('/Users/ChristinaShehata/Desktop/windowList.txt')
 
