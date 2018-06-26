@@ -7,9 +7,9 @@ from Bio.SeqRecord import SeqRecord
 ####################################################################################
 ##
 ## Files Needed:
-## sys.argv[1] = path to jsonDictA
+## sys.argv[1] = path to jsonDictB
 ## sys.argv[2] = a list containing the individuals of interest separated by '\n'
-## sys.argv[3] = path to directory for LociFolders A and B
+## sys.argv[3] = path to directory for LociFolder B
 ##
 ####################################################################################
 
@@ -26,8 +26,8 @@ def open_json(j):
 	"""
 	with open(j, "r") as f:
 		data = json.loads(f.read())
-	haploDictA = json.loads(data)
-	return haploDictA
+	haploDictB = json.loads(data)
+	return haploDictB
 
 def idLst(indList):
 	"""
@@ -35,7 +35,7 @@ def idLst(indList):
 	input indList: a list containing the individuals of interest separated by '\n'
 	"""
 	with open(indList, "r") as f: 
-		L = [line.strip() + 'A' for line in f.readlines()] #for haploDictA
+		L = [line.strip() + 'B' for line in f.readlines()] #for haploDictA
 	return L
 
 def parseDict(n, id, haploDictA):
@@ -45,7 +45,7 @@ def parseDict(n, id, haploDictA):
 	refList = ['A']*windowLength
 	newSeq = ''
 	tupList = []
-	for position, id_snp in haploDictA.items():
+	for position, id_snp in haploDictB.items():
 		for i in range(len(refList)):
 			if int(position) - n == i:
 				refList[i] = id_snp[id]
@@ -84,11 +84,11 @@ def write(new_dict, output):
 				f.write("{}	{}\n".format(("> " + ind_seq.id), ind_seq.seq))
 
 def main():
-	haploDictA = open_json(sys.argv[1]) #for haploDictA
+	haploDictB = open_json(sys.argv[1]) #for haploDictA
 	idList = idLst(sys.argv[2])
 	for n in windowList:
 		for id in idList:
-			newL.append(parseDict(n,id, haploDictA)) 
+			newL.append(parseDict(n,id, haploDictB)) 
 	new_dict = prep(idList)
 	write(new_dict, sys.argv[3])
 
