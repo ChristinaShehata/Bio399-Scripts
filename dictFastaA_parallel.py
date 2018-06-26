@@ -8,16 +8,14 @@ import time
 ####################################################################################
 ##
 ## Files Needed:
-## sys.argv[1] = path to jsonDictA
+## sys.argv[1] = path to jsonDictA (dictionary containing SNP data)
 ## sys.argv[2] = a list containing the individuals of interest separated by '\n'
-## sys.argv[3] = path to directory for LociFolderA
-## sys.argv[4] = window number
+## sys.argv[3] = path to directory for LociFolderA (output)
+## sys.argv[4] = window (loci) number (to parallelize) -- use windowList.py first
 ##
 ####################################################################################
 
 windowLength = 10000
-overlapLength = 5000
-windowList = list(range(55000,110000, overlapLength))
 
 def open_json(j):
 	"""
@@ -61,12 +59,12 @@ def main():
 	L = []
 	with open(outFile, 'w') as f:
 		for i in range(len(idList)):
-			print('Working on... ' + idList[i] + '\t' + str(i+1) + '/150')
+			print('Working on... ' + idList[i] + '\t' + str(i+1) + '/150') # check progress
 			L.append(parseDict(int(sys.argv[4]), idList[i], haploDictA)) 
 			f.write('>' + idList[i] + '\n' + L[i][0][1] + '\n')
 
 start_time = time.time()
 main()
-print("--- %s seconds ---" % (time.time() - start_time))
+print("--- %s seconds ---" % (time.time() - start_time)) # print runtime
 
 
