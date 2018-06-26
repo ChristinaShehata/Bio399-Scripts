@@ -34,7 +34,7 @@ def idLst(indList):
 	input indList: a list containing the individuals of interest separated by '\n'
 	"""
 	with open(indList, "r") as f: 
-		L = [line.strip() + chromosome for line in f.readlines()] #for haploDictA
+		L = [line.strip() + chromosome for line in f.readlines()]
 	return L
 
 def parseDict(n, id, haploDict):
@@ -42,12 +42,12 @@ def parseDict(n, id, haploDict):
 	input n: start position of window
 	"""
 	xList = []
-	refList = ['A']*windowLength
+	refList = ['A'] * windowLength	# set a default character for when there is no SNP
 	newSeq = ''
 	tupList = []
 	for position, id_snp in haploDict.items():
 		for i in range(len(refList)):
-			if int(position)-n == i:
+			if int(position) - n == i:	# if there's a SNP, change the default character
 				refList[i] = id_snp[id]
 				newSeq = "".join(refList)
 	tupList.append((id, newSeq, n))
@@ -56,7 +56,7 @@ def parseDict(n, id, haploDict):
 def main():
 	haploDict = open_json(sys.argv[1])
 	idList = idLst(sys.argv[2])
-	outFile = str(sys.argv[3]) + 'output_{}.fa'.format(str(sys.argv[4]) + '-' + str(int(sys.argv[4])+windowLength))
+	outFile = str(sys.argv[3]) + 'output_{}.fa'.format(str(sys.argv[4]) + '-' + str(int(sys.argv[4]) + windowLength))
 	L = []
 	with open(outFile, 'w') as f:
 		for i in range(len(idList)):
