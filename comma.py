@@ -22,6 +22,6 @@ def comma(populationFile, outFile):
 			q.write(popList1)
 
 def main():
-	#comma(sys.argv[1], sys.argv[2])
+	comma(sys.argv[1], sys.argv[2])
 
 main()
