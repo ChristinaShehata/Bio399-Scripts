@@ -9,51 +9,35 @@ import csv
 ##
 ######################################################################
 
-def make_population_file(CSV, pops):
+def make_population_file(CSV):
 	""" makes tabulated populations file for LSD """
-	taxa = []
-	red = []
-	orange = []
-	light_blue = []
-	dark_blue = []
-	purple = []
-	yellow = []
-	pink = []
-	green = []
+	recordList = []
+	L = []
+	with open(CSV, 'r', encoding="utf-8") as input:
+		reader = csv.reader(input)
+		for record in reader:
+			recordList.append(record)
+	for rec in recordList:
+		for i in range(len(rec)):
+			if rec[i] == '0':
+				rec[i] = '00'
+			if '\ufeff' in rec[i]:
+				rec[i] = rec[i][1:]
+		L.append(rec)
+	return L
+
+def write_popFile(L, pops):
+	""" writes population file """
 	with open(pops, 'w', encoding="utf-8") as output:
-		with open(CSV, 'r', encoding="utf-8") as input:
-			reader = csv.reader(input)
-			for record in reader:
-				taxa.append(record[0].replace('\ufeff', ''))
-				red.append(record[1].replace('0', '00'))
-				orange.append(record[2].replace('0', '00'))
-				light_blue.append(record[3].replace('0', '00'))
-				dark_blue.append(record[4].replace('0', '00'))
-				purple.append(record[5].replace('0', '00'))
-				yellow.append(record[6].replace('0', '00'))
-				pink.append(record[7].replace('0', '00'))
-				green.append(record[8].replace('0', '00'))
-		output.write('\t'.join(taxa))
-		output.write('\t\n')
-		output.write('\t'.join(red))
-		output.write('\t\n')
-		output.write('\t'.join(orange))
-		#output.write('\t\n')
-		#output.write('\t'.join(light_blue))
-		#output.write('\t\n')
-		#output.write('\t'.join(dark_blue))
-		#output.write('\t\n')
-		#output.write('\t'.join(purple))
-		#output.write('\t\n')
-		#output.write('\t'.join(yellow))
-		#output.write('\t\n')
-		#output.write('\t'.join(pink))
-		#output.write('\t\n')
-		#output.write('\t'.join(green))
+		for i in range(len(L[0])):
+			for rec in L: output.write(rec[i] + '\t')
+			output.write('\n')
 
-#make_population_file(sys.argv[1], sys.argv[2])		
-#make_population_file('/Users/ChristinaShehata/Desktop/artocarpus.csv', '/Users/ChristinaShehata/Desktop/LSD/artocarpus.pops')
+def main():
+	L = make_population_file(sys.argv[1])
+	write_popFile(L, sys.argv[2])
 
+main()
 
 
 
