@@ -1,13 +1,14 @@
 import sys
 import csv
 from Bio import SeqIO
+from Bio import Phylo
 
 ####################################################################################
 ##
 ## Files Needed:
 ## sys.argv[1] = list of all genes
 ## sys.argv[2] = csv containing tree information for population file
-## sys.argv[3] = path to directory containing trimmed alignments
+## sys.argv[3] = path to directory containing gene trees
 ## sys.argv[4] = path to directory containing output population files
 ## sys.argv[5] = number of branches to test
 ## sys.argv[6] = output n File (number of taxa per gene tree)
@@ -31,21 +32,23 @@ def master_pop(inFile):
 		for i in range(len(value)):
 			if value[i] == '0': value[i] = '00'
 	return master_popDict
-
-def ind_geneDict(gene, myPath):
-	""" makes a dictionary containing the individuals represented in each gene file """
+	
+def ind_geneDict_tree(gene, myPath):
+	""" makes a dictionary containing the individuals represented in each gene file from
+	gene trees
+	"""
 	ind_geneDict = {}
 	recordList = []
-	with open(myPath + '{}.trimmed.FNA.nog'.format(gene), 'r') as f:
-		for record in SeqIO.parse(f, "fasta"):
-			recordList.append(record.id)	
+	tree = Phylo.read(myPath + 'RAxML_bestTree.{}.tree'.format(gene), "newick")
+	for ind in tree.get_terminals():
+		recordList.append(ind.name)
 	ind_geneDict[gene] = recordList
 	return ind_geneDict
-
+		
 def write_popFile(master_popDict, indGeneDict, gene, branches, outFile):
 	""" writes population file """
 	with open(outFile, 'w') as f:
-		for i in range(int(branches)+1):
+		for i in range(int(branches) + 1):
 			for ind in master_popDict:
 				if ind in indGeneDict[gene]:
 					f.write(master_popDict[ind][i].replace('\ufeff', '') + '\t')
@@ -62,7 +65,7 @@ def main():
 	geneList = allGenes(sys.argv[1])
 	master_popDict = master_pop(sys.argv[2])
 	for gene in geneList:
-		dictList.append(ind_geneDict(gene, sys.argv[3]))
+		dictList.append(ind_geneDict_tree(gene, sys.argv[3]))
 	indGeneDict = {k: v for d in dictList for k, v in d.items()}
 	for gene in geneList:
 		write_popFile(master_popDict, indGeneDict, gene, branches, sys.argv[4]+'{}.pops'.format(gene))
