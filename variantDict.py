@@ -6,11 +6,10 @@ from Bio import SeqIO
 ####################################################################################
 ##
 ## Files Needed:
-## sys.argv[1] = output window list
-## sys.argv[2] = list of all samples
-## sys.argv[3] = path to filtered_variant.txt files
-## sys.argv[4] = path to output fasta files (before concatenation)
-## sys.argv[5] = n (from window list)
+## sys.argv[1] = list of all samples
+## sys.argv[2] = path to filtered_variant.txt files
+## sys.argv[3] = path to output fasta files (before concatenation)
+## sys.argv[4] = n (from window list)
 ##
 ####################################################################################
 windowLength = 10000
@@ -70,15 +69,15 @@ def parse_dict(outPath, tupList, n, ID):
 
 def all_records(ID):
 	tupList = []
-	n = sys.argv[5]
-	tupList.append(chr1_list(sys.argv[3], n, ID))
-	parse_dict(outPath, tupList, n, ID)
+	n = sys.argv[4]
+	tupList.append(chr1_list(sys.argv[2], n, ID))
+	parse_dict(sys.argv[3], tupList, n, ID)
 
 def main():
 	""" gets SNP information from all samples """
-	#windowFile(sys.argv[1])
+	#windowFile('/Users/ChristinaShehata/Desktop/arabidopsis/windowFile.txt')
 	allRecords = []
-	sampleList = sampleL(sys.argv[2])
+	sampleList = sampleL(sys.argv[1])
 	for ID in sampleList:
 		all_records(ID)
 
